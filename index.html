@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Web Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .btn { padding: 10px 20px; background: #3498db; color: white; border: none; cursor: pointer; border-radius: 5px; }
+    .btn:hover { background: #2980b9; }
+    .secret { display: none; color: red; font-weight: bold; margin-top: 10px; }
+    .tabs { display: flex; cursor: pointer; margin-bottom: 10px; }
+    .tab { padding: 10px; background: #ccc; margin-right: 5px; }
+    .tab-content { display: none; border: 1px solid #ccc; padding: 10px; }
+    .tab-content.active { display: block; }
+    .gallery img { width: 150px; height: auto; margin: 5px; transition: transform 0.3s ease; }
+    .gallery img:hover { transform: scale(1.1); }
+    .form-control { margin-bottom: 10px; }
+    .form-control input { width: 100%; padding: 8px; }
+    .error { color: red; font-size: 0.9em; display: none; }
+  </style>
+</head>
+<body>
+
+  <h1>🎉 Interactive Web Features</h1>
+
+  <!-- 1. Event Handling -->
+  <button class="btn" id="eventBtn">Click me</button>
+  <p id="eventResult"></p>
+  <p id="secretAction" class="secret">🎉 Secret Action Triggered!</p>
+
+  <!-- 2. Interactive Tabs -->
+  <div class="tabs">
+    <div class="tab" onclick="showTab(0)">Tab 1</div>
+    <div class="tab" onclick="showTab(1)">Tab 2</div>
+  </div>
+  <div class="tab-content active">Content for Tab 1</div>
+  <div class="tab-content">Content for Tab 2</div>
+
+  <!-- 2. Gallery -->
+  <h3>📷 Image Gallery</h3>
+  <div class="gallery">
+    <img src="https://via.placeholder.com/150" alt="Gallery Image 1" />
+    <img src="https://via.placeholder.com/150" alt="Gallery Image 2" />
+    <img src="https://via.placeholder.com/150" alt="Gallery Image 3" />
+  </div>
+
+  <!-- 3. Form Validation -->
+  <h3>📋 Sign-Up Form</h3>
+  <form id="signupForm">
+    <div class="form-control">
+      <label>Email:</label><br>
+      <input type="email" id="email" required />
+      <div id="emailError" class="error">Invalid email format</div>
+    </div>
+    <div class="form-control">
+      <label>Password:</label><br>
+      <input type="password" id="password" required />
+      <div id="passwordError" class="error">Minimum 8 characters required</div>
+    </div>
+    <button type="submit" class="btn">Submit</button>
+  </form>
+
+  <script>
+    // Event Handling
+    const btn = document.getElementById('eventBtn');
+    const result = document.getElementById('eventResult');
+    const secret = document.getElementById('secretAction');
+    let clickCount = 0;
+    let pressTimer;
+
+    btn.addEventListener('click', () => {
+      result.textContent = "✅ Button clicked!";
+    });
+
+    btn.addEventListener('dblclick', () => {
+      secret.style.display = 'block';
+    });
+
+    btn.addEventListener('mousedown', () => {
+      pressTimer = setTimeout(() => secret.style.display = 'block', 1000);
+    });
+
+    btn.addEventListener('mouseup', () => {
+      clearTimeout(pressTimer);
+    });
+
+    // Keypress Detection
+    document.addEventListener('keydown', (e) => {
+      result.textContent = `🔑 You pressed: ${e.key}`;
+    });
+
+    // Tabs
+    function showTab(index) {
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(c => c.classList.remove('active'));
+      contents[index].classList.add('active');
+    }
+
+    // Form Validation
+    const form = document.getElementById('signupForm');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+
+    email.addEventListener('input', () => {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      emailError.style.display = emailPattern.test(email.value) ? 'none' : 'block';
+    });
+
+    password.addEventListener('input', () => {
+      passwordError.style.display = password.value.length >= 8 ? 'none' : 'block';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!email.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return;
+      if (password.value.length < 8) return;
+      alert('✅ Form submitted successfully!');
+      form.reset();
+    });
+  </script>
+</body>
+</html>
